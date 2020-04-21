@@ -13,6 +13,8 @@ logging.basicConfig(level=logging.INFO)
 
 log = logging.getLogger("dpybot")
 
+NEVER_READY = True
+
 
 @commands.is_owner()
 @bot.command()
@@ -72,6 +74,14 @@ async def on_command_error(ctx: commands.Context, error: commands.CommandError) 
             await ctx.send_help(ctx.command)
     else:
         log.error(type(error).__name__, exc_info=error)
+
+
+@bot.event
+async def on_ready():
+    global NEVER_READY
+    if NEVER_READY:
+        bot.load_extension("dpybot.cogs.admin")
+        NEVER_READY = False
 
 
 if __name__ == "__main__":
