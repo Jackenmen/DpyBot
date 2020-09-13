@@ -7,7 +7,10 @@ from discord.ext import commands
 
 warnings.filterwarnings("default", category=DeprecationWarning)
 
-bot = commands.AutoShardedBot(command_prefix="===")
+bot = commands.AutoShardedBot(
+    command_prefix=commands.when_mentioned_or("==="),
+    intents=discord.Intents(members=True, presences=True, dm_typing=False, guild_typing=False),
+)
 
 logging.basicConfig(level=logging.INFO)
 
@@ -87,4 +90,14 @@ async def on_ready():
 if __name__ == "__main__":
     print(discord.__version__)
     TOKEN = ""
-    bot.run(TOKEN)
+    try:
+        bot.run(TOKEN)
+    except discord.ConnectionClosed as e:
+        if e.code == 4014:
+            print(
+                "You sent a disallowed intent for a Gateway Intent."
+                " You may have tried to specify an intent"
+                " that you have not enabled or are not whitelisted for."
+            )
+        else:
+            raise
