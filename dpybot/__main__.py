@@ -8,7 +8,7 @@ warnings.filterwarnings("default", category=DeprecationWarning)
 
 bot = commands.AutoShardedBot(
     command_prefix=commands.when_mentioned_or("==="),
-    intents=discord.Intents(members=True, presences=True, dm_typing=False, guild_typing=False),
+    intents=discord.Intents(members=True, presences=True),
 )
 
 logging.basicConfig(level=logging.INFO)
