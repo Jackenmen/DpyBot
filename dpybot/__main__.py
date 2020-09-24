@@ -91,12 +91,9 @@ if __name__ == "__main__":
     bot.load_extension("dpybot.cogs.admin")
     try:
         bot.run(TOKEN)
-    except discord.ConnectionClosed as e:
-        if e.code == 4014:
-            print(
-                "You sent a disallowed intent for a Gateway Intent."
-                " You may have tried to specify an intent"
-                " that you have not enabled or are not whitelisted for."
-            )
-        else:
-            raise
+    except discord.PrivilegedIntentsRequired:
+        print(
+            "You sent a disallowed intent for a Gateway Intent."
+            " You may have tried to specify an intent"
+            " that you have not enabled or are not whitelisted for."
+        )
