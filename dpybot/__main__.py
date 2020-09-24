@@ -15,8 +15,6 @@ logging.basicConfig(level=logging.INFO)
 
 log = logging.getLogger("dpybot")
 
-NEVER_READY = True
-
 
 @commands.is_owner()
 @bot.command()
@@ -80,15 +78,13 @@ async def on_command_error(ctx: commands.Context, error: commands.CommandError) 
 
 @bot.event
 async def on_ready():
-    global NEVER_READY
-    if NEVER_READY:
-        bot.load_extension("dpybot.cogs.admin")
-        NEVER_READY = False
+    log.info("I am ready!")
 
 
 if __name__ == "__main__":
     print(discord.__version__)
     TOKEN = ""
+    bot.load_extension("dpybot.cogs.admin")
     try:
         bot.run(TOKEN)
     except discord.ConnectionClosed as e:
