@@ -11,7 +11,11 @@ bot = commands.AutoShardedBot(
     intents=discord.Intents(members=True, presences=True),
 )
 
-logging.basicConfig(level=logging.INFO)
+logging.basicConfig(
+    format="[%(asctime)s] [%(levelname)s] %(name)s: %(message)s",
+    datefmt="%Y-%m-%d %H:%M:%S",
+    level=logging.INFO,
+)
 
 log = logging.getLogger("dpybot")
 
