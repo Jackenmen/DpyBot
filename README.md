@@ -5,7 +5,7 @@
 
 This is a very simple d.py bot that's intended for my own testing of functionalities of d.py. This is not meant for anything more than testing.
 
-Make a venv, install `discord.py` and start with `python -m dpybot`.
+Make a venv, run `pip install -r requirements.txt` and start with `python -m dpybot`.
 
 # License
 

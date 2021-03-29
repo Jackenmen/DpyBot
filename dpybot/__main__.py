@@ -1,8 +1,12 @@
 import logging
+import os
 import warnings
 
 import discord
 from discord.ext import commands
+from dotenv import load_dotenv
+
+load_dotenv()
 
 warnings.filterwarnings("default", category=DeprecationWarning)
 
@@ -87,7 +91,7 @@ async def on_ready():
 
 if __name__ == "__main__":
     print(discord.__version__)
-    TOKEN = ""
+    TOKEN = os.getenv("DPYBOT_TOKEN")
     bot.load_extension("dpybot.cogs.admin")
     try:
         bot.run(TOKEN)
