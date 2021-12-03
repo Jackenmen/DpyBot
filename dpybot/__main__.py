@@ -1,3 +1,4 @@
+import argparse
 import logging
 import os
 import warnings
@@ -89,8 +90,20 @@ async def on_ready():
     log.info("I am ready!")
 
 
+def parse_cli_flags() -> argparse.Namespace:
+    parser = argparse.ArgumentParser()
+    parser.add_argument(
+        "--debug", action="store_true", help="Set the logger's level to debug."
+    )
+    return parser.parse_args()
+
+
 if __name__ == "__main__":
-    print(discord.__version__)
+    print("discord.py version:", discord.__version__)
+    args = parse_cli_flags()
+    if args.debug:
+        root_logger = logging.getLogger("")
+        root_logger.setLevel(logging.DEBUG)
     TOKEN = os.getenv("DPYBOT_TOKEN")
     bot.load_extension("dpybot.cogs.admin")
     try:
