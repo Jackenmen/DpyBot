@@ -1,4 +1,5 @@
 import argparse
+import asyncio
 import logging
 import os
 import warnings
@@ -109,17 +110,53 @@ def setup_logging(debug: bool = False) -> None:
     )
 
 
+def _cancel_all_tasks(loop: asyncio.AbstractEventLoop) -> None:
+    to_cancel = asyncio.all_tasks(loop)
+    if not to_cancel:
+        return
+
+    for task in to_cancel:
+        task.cancel()
+
+    loop.run_until_complete(asyncio.gather(*to_cancel, return_exceptions=True))
+
+    for task in to_cancel:
+        if task.cancelled():
+            continue
+        if (exception := task.exception()) is not None:
+            loop.call_exception_handler(
+                {
+                    "message": "unhandled exception during shutdown",
+                    "exception": exception,
+                    "task": task,
+                }
+            )
+
+
 if __name__ == "__main__":
     print("discord.py version:", discord.__version__)
     args = parse_cli_flags()
     setup_logging(args.debug)
     TOKEN = os.getenv("DPYBOT_TOKEN")
     bot.load_extension("dpybot.cogs.admin")
+
+    loop = asyncio.get_event_loop()
     try:
-        bot.run(TOKEN)
+        loop.run_until_complete(bot.start(TOKEN))
+    except KeyboardInterrupt:
+        print("Ctrl+C received, exiting...")
     except discord.PrivilegedIntentsRequired:
         print(
             "You sent a disallowed intent for a Gateway Intent."
             " You may have tried to specify an intent"
             " that you have not enabled or are not whitelisted for."
         )
+    finally:
+        try:
+            loop.run_until_complete(bot.close())
+            _cancel_all_tasks(loop)
+            loop.run_until_complete(asyncio.sleep(2))
+            loop.run_until_complete(loop.shutdown_asyncgens())
+        finally:
+            asyncio.set_event_loop(None)
+            loop.close()
