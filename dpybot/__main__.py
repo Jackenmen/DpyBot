@@ -16,12 +16,6 @@ bot = commands.AutoShardedBot(
     intents=discord.Intents.all(),
 )
 
-logging.basicConfig(
-    format="[%(asctime)s] [%(levelname)s] %(name)s: %(message)s",
-    datefmt="%Y-%m-%d %H:%M:%S",
-    level=logging.INFO,
-)
-
 log = logging.getLogger("dpybot")
 
 
@@ -98,12 +92,27 @@ def parse_cli_flags() -> argparse.Namespace:
     return parser.parse_args()
 
 
+def setup_logging(debug: bool = False) -> None:
+    info_file_handler = logging.FileHandler("info.log", encoding="utf-8")
+    debug_file_handler = logging.FileHandler("debug.log", mode="w", encoding="utf-8")
+    stdout_handler = logging.StreamHandler()
+
+    info_file_handler.setLevel(logging.INFO)
+    if not debug:
+        stdout_handler.setLevel(logging.INFO)
+
+    logging.basicConfig(
+        format="[%(asctime)s] [%(levelname)s] %(name)s: %(message)s",
+        datefmt="%Y-%m-%d %H:%M:%S",
+        level=logging.DEBUG,
+        handlers=[stdout_handler, info_file_handler, debug_file_handler],
+    )
+
+
 if __name__ == "__main__":
     print("discord.py version:", discord.__version__)
     args = parse_cli_flags()
-    if args.debug:
-        root_logger = logging.getLogger("")
-        root_logger.setLevel(logging.DEBUG)
+    setup_logging(args.debug)
     TOKEN = os.getenv("DPYBOT_TOKEN")
     bot.load_extension("dpybot.cogs.admin")
     try:
