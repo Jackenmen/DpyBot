@@ -13,7 +13,7 @@ load_dotenv()
 warnings.filterwarnings("default", category=DeprecationWarning)
 
 bot = commands.AutoShardedBot(
-    command_prefix=commands.when_mentioned_or("==="),
+    command_prefix=commands.when_mentioned_or(os.getenv("DPYBOT_PREFIX", "===")),
     intents=discord.Intents.all(),
 )
 
