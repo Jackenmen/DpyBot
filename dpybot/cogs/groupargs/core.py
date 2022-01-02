@@ -16,11 +16,11 @@ class GroupArgs(commands.Cog):
             return
         ctx.some_special_attrname = channel
 
-    @edit.group(name='name')
+    @edit.group(name="name")
     async def edit_name(self, ctx):
         pass
 
-    @edit_name.group(name='format')
+    @edit_name.group(name="format")
     async def edit_name_format(self, ctx, option: str):
         await ctx.send(f"{ctx.some_special_attrname=}")
         await ctx.send(f"{option=}")

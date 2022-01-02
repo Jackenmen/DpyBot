@@ -55,8 +55,13 @@ async def reload(ctx: commands.Context, cog_name: str) -> None:
     except commands.NoEntryPointError:
         await ctx.send(f"Cog with name `{cog_name}` doesn't have `setup()` function.")
     except commands.ExtensionFailed as e:
-        await ctx.send(f"Cog with name `{cog_name}` couldn't be reloaded. See logs for more details.")
-        log.error("Cog with name `%s` couldn't be reloaded.", cog_name, exc_info=e.original)
+        await ctx.send(
+            f"Cog with name `{cog_name}` couldn't be reloaded."
+            " See logs for more details."
+        )
+        log.error(
+            "Cog with name `%s` couldn't be reloaded.", cog_name, exc_info=e.original
+        )
     else:
         await ctx.send(f"{cog_name} reloaded.")
 
@@ -73,8 +78,12 @@ async def load(ctx: commands.Context, cog_name: str) -> None:
     except commands.NoEntryPointError:
         await ctx.send(f"Cog with name `{cog_name}` doesn't have `setup()` function.")
     except commands.ExtensionFailed as e:
-        await ctx.send(f"Cog with name `{cog_name}` couldn't be loaded. See logs for more details.")
-        log.error("Cog with name `%s` couldn't be loaded.", cog_name, exc_info=e.original)
+        await ctx.send(
+            f"Cog with name `{cog_name}` couldn't be loaded. See logs for more details."
+        )
+        log.error(
+            "Cog with name `%s` couldn't be loaded.", cog_name, exc_info=e.original
+        )
     else:
         await ctx.send(f"{cog_name} loaded.")
 

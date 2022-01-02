@@ -1,5 +1,3 @@
-from enum import Enum
-
 from discord.ext import commands
 
 from .enums import Color
