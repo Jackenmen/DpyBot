@@ -99,6 +99,11 @@ async def unload(ctx: commands.Context, cog_name: str) -> None:
         await ctx.send(f"{cog_name} unloaded.")
 
 
+@bot.command()
+async def ping(ctx: commands.Context) -> None:
+    await ctx.send("Pong!")
+
+
 @commands.is_owner()
 @bot.command()
 async def shutdown(ctx: commands.Context) -> None:
