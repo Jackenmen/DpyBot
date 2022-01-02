@@ -90,6 +90,13 @@ async def unload(ctx: commands.Context, cog_name: str) -> None:
         await ctx.send(f"{cog_name} unloaded.")
 
 
+@commands.is_owner()
+@bot.command()
+async def shutdown(ctx: commands.Context) -> None:
+    print("Shutting down...")
+    await bot.close()
+
+
 @bot.event
 async def on_command_error(ctx: commands.Context, error: commands.CommandError) -> None:
     if isinstance(error, commands.MissingRequiredArgument):
