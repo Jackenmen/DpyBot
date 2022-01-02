@@ -108,6 +108,7 @@ async def ping(ctx: commands.Context) -> None:
 @bot.command()
 async def shutdown(ctx: commands.Context) -> None:
     print("Shutting down...")
+    await ctx.send("Shutting down...")
     await bot.close()
 
 
