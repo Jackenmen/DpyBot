@@ -20,11 +20,34 @@ bot = commands.AutoShardedBot(
 log = logging.getLogger("dpybot")
 
 
+def reload_extension(cog_name: str) -> None:
+    try:
+        bot.reload_extension(f"dpybot.ext_cogs.{cog_name}")
+    except commands.ExtensionNotLoaded:
+        bot.reload_extension(f"dpybot.cogs.{cog_name}")
+    except commands.ExtensionNotFound:
+        bot.load_extension(f"dpybot.cogs.{cog_name}")
+
+
+def load_extension(cog_name: str) -> None:
+    try:
+        bot.load_extension(f"dpybot.ext_cogs.{cog_name}")
+    except commands.ExtensionNotFound:
+        bot.load_extension(f"dpybot.cogs.{cog_name}")
+
+
+def unload_extension(cog_name: str) -> None:
+    try:
+        bot.unload_extension(f"dpybot.ext_cogs.{cog_name}")
+    except commands.ExtensionNotLoaded:
+        bot.unload_extension(f"dpybot.cogs.{cog_name}")
+
+
 @commands.is_owner()
 @bot.command()
 async def reload(ctx: commands.Context, cog_name: str) -> None:
     try:
-        bot.reload_extension(f"dpybot.cogs.{cog_name}")
+        reload_extension(cog_name)
     except commands.ExtensionNotLoaded:
         await ctx.send(f"Cog with name `{cog_name}` wasn't loaded.")
     except commands.ExtensionNotFound:
@@ -42,7 +65,7 @@ async def reload(ctx: commands.Context, cog_name: str) -> None:
 @bot.command()
 async def load(ctx: commands.Context, cog_name: str) -> None:
     try:
-        bot.load_extension(f"dpybot.cogs.{cog_name}")
+        load_extension(cog_name)
     except commands.ExtensionAlreadyLoaded:
         await ctx.send(f"Cog with name `{cog_name}` is already loaded.")
     except commands.ExtensionNotFound:
@@ -60,7 +83,7 @@ async def load(ctx: commands.Context, cog_name: str) -> None:
 @bot.command()
 async def unload(ctx: commands.Context, cog_name: str) -> None:
     try:
-        bot.unload_extension(f"dpybot.cogs.{cog_name}")
+        unload_extension(cog_name)
     except commands.ExtensionNotLoaded:
         await ctx.send(f"Cog with name `{cog_name}` wasn't loaded.")
     else:
@@ -138,6 +161,9 @@ if __name__ == "__main__":
     args = parse_cli_flags()
     setup_logging(args.debug)
     TOKEN = os.getenv("DPYBOT_TOKEN")
+    LOAD_ON_STARTUP = os.getenv("DPYBOT_LOAD_ON_STARTUP", "").split(",")
+    for cog in LOAD_ON_STARTUP:
+        load_extension(cog)
 
     loop = asyncio.get_event_loop()
     try:
