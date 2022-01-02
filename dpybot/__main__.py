@@ -5,129 +5,11 @@ import os
 import warnings
 
 import discord
-from discord.ext import commands
 from dotenv import load_dotenv
 
-load_dotenv()
+from dpybot.bot import DpyBot
 
 warnings.filterwarnings("default", category=DeprecationWarning)
-
-bot = commands.AutoShardedBot(
-    command_prefix=commands.when_mentioned_or(os.getenv("DPYBOT_PREFIX", "===")),
-    intents=discord.Intents.all(),
-)
-
-log = logging.getLogger("dpybot")
-
-
-def reload_extension(cog_name: str) -> None:
-    try:
-        bot.reload_extension(f"dpybot.ext_cogs.{cog_name}")
-    except commands.ExtensionNotLoaded:
-        bot.reload_extension(f"dpybot.cogs.{cog_name}")
-    except commands.ExtensionNotFound:
-        bot.load_extension(f"dpybot.cogs.{cog_name}")
-
-
-def load_extension(cog_name: str) -> None:
-    try:
-        bot.load_extension(f"dpybot.ext_cogs.{cog_name}")
-    except commands.ExtensionNotFound:
-        bot.load_extension(f"dpybot.cogs.{cog_name}")
-
-
-def unload_extension(cog_name: str) -> None:
-    try:
-        bot.unload_extension(f"dpybot.ext_cogs.{cog_name}")
-    except commands.ExtensionNotLoaded:
-        bot.unload_extension(f"dpybot.cogs.{cog_name}")
-
-
-@commands.is_owner()
-@bot.command()
-async def reload(ctx: commands.Context, cog_name: str) -> None:
-    try:
-        reload_extension(cog_name)
-    except commands.ExtensionNotLoaded:
-        await ctx.send(f"Cog with name `{cog_name}` wasn't loaded.")
-    except commands.ExtensionNotFound:
-        await ctx.send(f"Can't find cog with name `{cog_name}.")
-    except commands.NoEntryPointError:
-        await ctx.send(f"Cog with name `{cog_name}` doesn't have `setup()` function.")
-    except commands.ExtensionFailed as e:
-        await ctx.send(
-            f"Cog with name `{cog_name}` couldn't be reloaded."
-            " See logs for more details."
-        )
-        log.error(
-            "Cog with name `%s` couldn't be reloaded.", cog_name, exc_info=e.original
-        )
-    else:
-        await ctx.send(f"{cog_name} reloaded.")
-
-
-@commands.is_owner()
-@bot.command()
-async def load(ctx: commands.Context, cog_name: str) -> None:
-    try:
-        load_extension(cog_name)
-    except commands.ExtensionAlreadyLoaded:
-        await ctx.send(f"Cog with name `{cog_name}` is already loaded.")
-    except commands.ExtensionNotFound:
-        await ctx.send(f"Can't find cog with name `{cog_name}.")
-    except commands.NoEntryPointError:
-        await ctx.send(f"Cog with name `{cog_name}` doesn't have `setup()` function.")
-    except commands.ExtensionFailed as e:
-        await ctx.send(
-            f"Cog with name `{cog_name}` couldn't be loaded. See logs for more details."
-        )
-        log.error(
-            "Cog with name `%s` couldn't be loaded.", cog_name, exc_info=e.original
-        )
-    else:
-        await ctx.send(f"{cog_name} loaded.")
-
-
-@commands.is_owner()
-@bot.command()
-async def unload(ctx: commands.Context, cog_name: str) -> None:
-    try:
-        unload_extension(cog_name)
-    except commands.ExtensionNotLoaded:
-        await ctx.send(f"Cog with name `{cog_name}` wasn't loaded.")
-    else:
-        await ctx.send(f"{cog_name} unloaded.")
-
-
-@bot.command()
-async def ping(ctx: commands.Context) -> None:
-    await ctx.send("Pong!")
-
-
-@commands.is_owner()
-@bot.command()
-async def shutdown(ctx: commands.Context) -> None:
-    print("Shutting down...")
-    await ctx.send("Shutting down...")
-    await bot.close()
-
-
-@bot.event
-async def on_command_error(ctx: commands.Context, error: commands.CommandError) -> None:
-    if isinstance(error, commands.MissingRequiredArgument):
-        await ctx.send_help(ctx.command)
-    elif isinstance(error, commands.BadArgument):
-        if error.args:
-            await ctx.send(error.args[0])
-        else:
-            await ctx.send_help(ctx.command)
-    else:
-        log.error(type(error).__name__, exc_info=error)
-
-
-@bot.event
-async def on_ready():
-    log.info("I am ready!")
 
 
 def parse_cli_flags() -> argparse.Namespace:
@@ -178,16 +60,10 @@ def _cancel_all_tasks(loop: asyncio.AbstractEventLoop) -> None:
             )
 
 
-if __name__ == "__main__":
-    print("discord.py version:", discord.__version__)
-    args = parse_cli_flags()
-    setup_logging(args.debug)
-    TOKEN = os.getenv("DPYBOT_TOKEN")
-    LOAD_ON_STARTUP = os.getenv("DPYBOT_LOAD_ON_STARTUP", "").split(",")
-    for cog in LOAD_ON_STARTUP:
-        load_extension(cog)
-
+def run_bot() -> None:
+    TOKEN = os.environ["DPYBOT_TOKEN"]
     loop = asyncio.get_event_loop()
+    bot = DpyBot()
     try:
         loop.run_until_complete(bot.start(TOKEN))
     except KeyboardInterrupt:
@@ -207,3 +83,15 @@ if __name__ == "__main__":
         finally:
             asyncio.set_event_loop(None)
             loop.close()
+
+
+def main() -> None:
+    print("discord.py version:", discord.__version__)
+    args = parse_cli_flags()
+    load_dotenv()
+    setup_logging(args.debug)
+    run_bot()
+
+
+if __name__ == "__main__":
+    main()
