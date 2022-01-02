@@ -138,7 +138,6 @@ if __name__ == "__main__":
     args = parse_cli_flags()
     setup_logging(args.debug)
     TOKEN = os.getenv("DPYBOT_TOKEN")
-    bot.load_extension("dpybot.cogs.admin")
 
     loop = asyncio.get_event_loop()
     try:

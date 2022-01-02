@@ -13,10 +13,5 @@ Please see [LICENSE file](LICENSE) for details. In short, this project is open s
 
 ---
 
-This project contains a copy of `cogs/admin.py` file from [RoboDanny project](https://github.com/Rapptz/RoboDanny) which is distributed under the Mozilla Public License 2.0.
-Copy of this license can be found in LICENSE.txt file in folder dpybot/cogs/admin of this repository.
-
----
-
 > Jakub Kuczys &nbsp;&middot;&nbsp;
 > GitHub [@jack1142](https://github.com/jack1142)
