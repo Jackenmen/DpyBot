@@ -12,8 +12,26 @@ from dpybot.bot import DpyBot
 warnings.filterwarnings("default", category=DeprecationWarning)
 
 
+def _parse_env_name(arg) -> str:
+    file_name = f".env.{arg}" if arg else ".env"
+    if os.path.isfile(file_name):
+        return file_name
+    raise argparse.ArgumentTypeError(f"{file_name} file does not exist!")
+
+
 def parse_cli_flags() -> argparse.Namespace:
     parser = argparse.ArgumentParser()
+    parser.add_argument(
+        "env_name",
+        nargs="?",
+        default="",
+        type=_parse_env_name,
+        help=(
+            "Name of the environment that should be loaded."
+            " If passed, `.env.{env_name}` file will be loaded,"
+            " otherwise `.env` file is used instead."
+        ),
+    )
     parser.add_argument(
         "--debug", action="store_true", help="Set the logger's level to debug."
     )
@@ -88,7 +106,7 @@ def run_bot() -> None:
 def main() -> None:
     print("discord.py version:", discord.__version__)
     args = parse_cli_flags()
-    load_dotenv()
+    load_dotenv(args.env_name)
     setup_logging(args.debug)
     run_bot()
 
