@@ -1,6 +1,6 @@
 # DpyBot
 
-[![Subscribe on Patreon](https://img.shields.io/badge/Support%20me%20on-Patreon-orange.svg?logo=patreon)](https://www.patreon.com/Jackenmen)
+[![Sponsor on GitHub](https://img.shields.io/github/sponsors/jack1142?logo=github)](https://github.com/sponsors/jack1142)
 [![License: Apache-2.0](https://img.shields.io/badge/License-Apache--2.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 
 This is a very simple d.py bot that's intended for my own testing of functionalities of d.py. This is not meant for anything more than testing.
