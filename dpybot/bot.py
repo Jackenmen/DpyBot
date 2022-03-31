@@ -16,10 +16,11 @@ class DpyBot(commands.AutoShardedBot):
             intents=discord.Intents.all(),
         )
 
+    async def setup_hook(self) -> None:
         LOAD_ON_STARTUP = os.getenv("DPYBOT_LOAD_ON_STARTUP", "").split(",")
-        self.add_cog(Core(self))
+        await self.add_cog(Core(self))
         for pkg_name in LOAD_ON_STARTUP:
-            self.load_package(pkg_name)
+            await self.load_package(pkg_name)
 
     async def on_ready(self) -> None:
         log.info("I am ready!")
@@ -37,22 +38,22 @@ class DpyBot(commands.AutoShardedBot):
         else:
             log.error(type(error).__name__, exc_info=error)
 
-    def reload_package(self, name: str) -> None:
+    async def reload_package(self, name: str) -> None:
         try:
-            self.reload_extension(f"dpybot.ext_cogs.{name}")
+            await self.reload_extension(f"dpybot.ext_cogs.{name}")
         except commands.ExtensionNotLoaded:
-            self.reload_extension(f"dpybot.cogs.{name}")
+            await self.reload_extension(f"dpybot.cogs.{name}")
         except commands.ExtensionNotFound:
-            self.load_extension(f"dpybot.cogs.{name}")
+            await self.load_extension(f"dpybot.cogs.{name}")
 
-    def load_package(self, name: str) -> None:
+    async def load_package(self, name: str) -> None:
         try:
-            self.load_extension(f"dpybot.ext_cogs.{name}")
+            await self.load_extension(f"dpybot.ext_cogs.{name}")
         except commands.ExtensionNotFound:
-            self.load_extension(f"dpybot.cogs.{name}")
+            await self.load_extension(f"dpybot.cogs.{name}")
 
-    def unload_package(self, name: str) -> None:
+    async def unload_package(self, name: str) -> None:
         try:
-            self.unload_extension(f"dpybot.ext_cogs.{name}")
+            await self.unload_extension(f"dpybot.ext_cogs.{name}")
         except commands.ExtensionNotLoaded:
-            self.unload_extension(f"dpybot.cogs.{name}")
+            await self.unload_extension(f"dpybot.cogs.{name}")

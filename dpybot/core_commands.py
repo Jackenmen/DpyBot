@@ -18,7 +18,7 @@ class Core(commands.Cog):
     @commands.command()
     async def reload(self, ctx: commands.Context, pkg_name: str) -> None:
         try:
-            self.bot.reload_package(pkg_name)
+            await self.bot.reload_package(pkg_name)
         except commands.ExtensionNotLoaded:
             await ctx.send(f"Cog package with name `{pkg_name}` wasn't loaded.")
         except commands.ExtensionNotFound:
@@ -44,7 +44,7 @@ class Core(commands.Cog):
     @commands.command()
     async def load(self, ctx: commands.Context, pkg_name: str) -> None:
         try:
-            self.bot.load_package(pkg_name)
+            await self.bot.load_package(pkg_name)
         except commands.ExtensionAlreadyLoaded:
             await ctx.send(f"Cog package with name `{pkg_name}` is already loaded.")
         except commands.ExtensionNotFound:
@@ -70,7 +70,7 @@ class Core(commands.Cog):
     @commands.command()
     async def unload(self, ctx: commands.Context, pkg_name: str) -> None:
         try:
-            self.bot.unload_package(pkg_name)
+            await self.bot.unload_package(pkg_name)
         except commands.ExtensionNotLoaded:
             await ctx.send(f"Cog package with name `{pkg_name}` wasn't loaded.")
         else:
