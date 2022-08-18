@@ -80,7 +80,7 @@ def _cancel_all_tasks(loop: asyncio.AbstractEventLoop) -> None:
 
 def run_bot() -> None:
     TOKEN = os.environ["DPYBOT_TOKEN"]
-    loop = asyncio.get_event_loop()
+    loop = asyncio.new_event_loop()
     bot = DpyBot()
     try:
         loop.run_until_complete(bot.start(TOKEN))
