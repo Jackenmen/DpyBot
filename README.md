@@ -1,6 +1,6 @@
 # DpyBot
 
-[![Sponsor on GitHub](https://img.shields.io/github/sponsors/jack1142?logo=github)](https://github.com/sponsors/jack1142)
+[![Sponsor on GitHub](https://img.shields.io/github/sponsors/Jackenmen?logo=github)](https://github.com/sponsors/Jackenmen)
 [![License: Apache-2.0](https://img.shields.io/badge/License-Apache--2.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 
 This is a very simple d.py bot that's intended for my own testing of functionalities of d.py. This is not meant for anything more than testing.
@@ -20,11 +20,11 @@ Aside from the cogs in this repository, you can add external cogs in `dpybot/ext
 
 ``dpybot_ext_mgr`` is a tool that helps with managing repositories and installed cogs.
 
-For example, to install a cog from https://github.com/jack1142/DpyBot-DevCog, you can:
+For example, to install a cog from https://github.com/Jackenmen/DpyBot-DevCog, you can:
 1. Activate the venv.
 1. Run `python -m dpybot_ext_mgr`.
 1. Choose "Add a repository." option.
-1. Paste this URL: `https://github.com/jack1142/DpyBot-DevCog`
+1. Paste this URL: `https://github.com/Jackenmen/DpyBot-DevCog`
 1. Choose "Install a cog." option.
 1. Choose the repository (`DpyBot-DevCog`) and cog (`dev`).
 1. Exit the tool with `Exit.` option.
@@ -36,4 +36,4 @@ Please see [LICENSE file](LICENSE) for details. In short, this project is open s
 ---
 
 > Jakub Kuczys &nbsp;&middot;&nbsp;
-> GitHub [@jack1142](https://github.com/jack1142)
+> GitHub [@Jackenmen](https://github.com/Jackenmen)
