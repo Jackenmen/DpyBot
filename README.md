@@ -29,6 +29,13 @@ For example, to install a cog from https://github.com/Jackenmen/DpyBot-DevCog, y
 1. Choose the repository (`DpyBot-DevCog`) and cog (`dev`).
 1. Exit the tool with `Exit.` option.
 
+## My cogs
+
+-  https://github.com/Jackenmen/DpyBot-DevCog
+   -  Dev cog based on Red-DiscordBot's
+-  https://github.com/Jackenmen/DpyBot-MusicCog
+   -  Music cog based on Lavalink.py's example
+
 # License
 
 Please see [LICENSE file](LICENSE) for details. In short, this project is open source and you are free to modify and use my work as long as you credit me.
