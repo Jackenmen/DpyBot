@@ -21,6 +21,7 @@ class DpyBot(commands.AutoShardedBot):
         await self.add_cog(Core(self))
         for pkg_name in LOAD_ON_STARTUP:
             await self.load_package(pkg_name)
+        await self.tree.sync()
 
     async def on_ready(self) -> None:
         log.info("I am ready!")
